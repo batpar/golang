@@ -28,7 +28,9 @@ func main() {
 	}
 
 	gids, err := u.GroupIds()
-	handle(err)
+	if err != nil{
+    log.Println(err)
+  }
 	for _, gid := range gids {
 		group, err := user.LookupGroup(gid)
 		if err != nil {
