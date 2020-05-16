@@ -6,27 +6,23 @@ import (
 	"os"
 	"os/user"
 )
-//handle function for handling the errors encountered.
-func handle(err error) {
-	if err != nil {
-		log.Println(err)
-	}
-}
-//Entry point for the code.
+
 func main() {
 	args := os.Args
 	var u *user.User
 	var err error
-//Gets the current user if not specified.
+//Get current user if no username is provided.
 	if len(args) == 1 {
 		u, err = user.Current()
-		handle(err)
-		return
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	} else {
 		username := args[1]
 		u, err = user.Lookup(username)
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
 			return
 		}
 	}
@@ -35,7 +31,10 @@ func main() {
 	handle(err)
 	for _, gid := range gids {
 		group, err := user.LookupGroup(gid)
-		handle(err)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
 		fmt.Printf("Group is  %s and groupID is %s", group.Name, group.Gid)
 	}
 
